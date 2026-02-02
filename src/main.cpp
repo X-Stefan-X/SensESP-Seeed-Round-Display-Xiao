@@ -40,7 +40,28 @@ void setup() {
                     //->set_sk_server("192.168.10.3", 80)
                     ->get_app();
 
-  
+
+
+    // SignalK Battery & Voltage Producer
+float battery_soc = 0.0;
+float system_voltage = 0.0;
+
+auto battery_producer = new SKPathProducer<float>(
+    "electrical.batteries.1.capacity.stateOfCharge",
+    &battery_soc, "Battery SoC %",
+    new Linear(0, 100));
+
+auto voltage_producer = new SKPathProducer<float>(
+    "electrical.batteries.1.voltage",
+    &system_voltage, "Battery Voltage V",
+    new Linear(0, 15));
+
+// Battery Ring Display hinzufügen
+auto battery_display = new BatteryRingDisplay(
+    0, 0, 240, 240,  // Vollbild
+    &battery_soc, &system_voltage);
+
+ui.addElement(battery_display);
 
   // To avoid garbage collecting all shared pointers created in setup(),
   // loop from here.
