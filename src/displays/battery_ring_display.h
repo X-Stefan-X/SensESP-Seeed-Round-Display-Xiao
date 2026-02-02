@@ -1,67 +1,57 @@
 #pragma once
-#include <sensesp.h>
-#include <sensesp/ui/graphic_display.h>
-#include <SensESPDebug.h>
+#include <Adafruit_GFX.h>
+#include <sensesp/ui/nvalues.h>
 
-class BatteryRingDisplay : public Drawable {
+class BatteryRingDisplay : public NVValues<float, float> {
  public:
-  BatteryRingDisplay(int16_t x, int16_t y, int16_t width, int16_t height,
-                     float* battery_value, float* voltage_value)
-      : Drawable(x, y, width, height),
-        battery_value_(battery_value),
-        voltage_value_(voltage_value) {}
+  BatteryRingDisplay(float* battery_soc, float* voltage)
+      : NVValues<float, float>(2, battery_soc, voltage) {}
 
-  void draw(Adafruit_GFX* gfx) override {
-    int16_t center_x = x + width / 2;
-    int16_t center_y = y + height / 2;
-    int16_t ring_radius = min(width, height) / 2 - 5;
+  virtual void draw(Adafruit_GFX* gfx) override {
+    float soc = values[0];
+    float volt = values[1];
+    
+    int16_t cx = 120, cy = 120;
+    int16_t r_outer = 100;
+    int16_t r_inner = 80;
+    int16_t r_small = 50;
 
-    gfx->setTextSize(1);
+    gfx->fillScreen(TFT_BLACK);
+    
+    // Unterer Halbring: Battery SoC (180°-360°)
+    drawArc(gfx, cx, cy + 20, r_outer, r_inner, 180, 360, soc / 100.0,
+            TFT_GREEN, TFT_RED);
+    
+    // Label unten
     gfx->setTextColor(TFT_WHITE);
+    gfx->setTextSize(1);
+    gfx->setCursor(cx - 25, cy + 80);
+    gfx->printf("BATT:%.0f%%", soc);
 
-    // Unterer Halbring: Batterieladestand (0-100%)
-    drawHalfRing(gfx, center_x, center_y + ring_radius / 3, ring_radius / 2,
-                 *battery_value_ / 100.0, 180, 360, TFT_GREEN, TFT_RED);
-
-    // Wert-Label unten
-    gfx->setCursor(center_x - 20, center_y + ring_radius / 3 + ring_radius / 2 + 5);
-    gfx->printf("BATT:%.0f%%", *battery_value_);
-
-    // Oberer Ring mit Mittelstrich: Spannung
-    drawRingWithCenterLine(gfx, center_x, center_y - ring_radius / 3,
-                          ring_radius / 2, *voltage_value_ / 14.4, TFT_CYAN, TFT_RED);
-
-    // Wert-Label oben
-    gfx->setCursor(center_x - 25, center_y - ring_radius / 3 - ring_radius / 2 - 15);
-    gfx->printf("V:%.1f", *voltage_value_);
+    // Oberer Ring mit 0°-Strich: Voltage (0°-360°)
+    drawArc(gfx, cx, cy - 20, r_small, r_small - 12, 0, 360, volt / 14.4,
+            TFT_CYAN, TFT_RED);
+    
+    // WICHTIGER 0° Mittelstrich
+    gfx->drawLine(cx, cy - 40, cx, cy - 65, TFT_WHITE);
+    gfx->drawLine(cx, cy + 35, cx, cy + 50, TFT_WHITE);
+    
+    // Label oben
+    gfx->setCursor(cx - 20, cy - 110);
+    gfx->printf("V:%.1f", volt);
   }
 
  private:
-  float* battery_value_;
-  float* voltage_value_;
-
-  void drawHalfRing(Adafruit_GFX* gfx, int16_t cx, int16_t cy, int16_t r,
-                   float value, int16_t start_angle, int16_t end_angle,
-                   uint16_t fill_color, uint16_t empty_color) {
-    // Leerer Halbring
-    gfx->drawArc(cx, cy, r, r, start_angle, end_angle, 8, empty_color);
+  void drawArc(Adafruit_GFX* gfx, int16_t cx, int16_t cy, int16_t r1, int16_t r2,
+               int16_t start, int16_t end, float value, uint16_t fill_col,
+               uint16_t empty_col) {
+    // Leerer Ring
+    for (int16_t r = r2; r <= r1; r += 2) {
+      gfx->drawCircle(cx, cy, r, empty_col);
+    }
     
     // Gefüllter Teil
-    int16_t fill_end = start_angle + (end_angle - start_angle) * value;
-    gfx->fillArc(cx, cy, r, r, start_angle, fill_end, 8, fill_color);
-  }
-
-  void drawRingWithCenterLine(Adafruit_GFX* gfx, int16_t cx, int16_t cy, int16_t r,
-                             float value, uint16_t fill_color, uint16_t empty_color) {
-    // Voller Ring leeren
-    gfx->drawCircle(cx, cy, r, empty_color);
-    gfx->drawCircle(cx, cy, r - 8, empty_color);
-    
-    // Gefüllter Bogen
-    gfx->fillArc(cx, cy, r, r, 0, 360 * value, 8, fill_color);
-    
-    // Wichtiger Mittelstrich (0-Position)
-    gfx->drawLine(cx, cy - r, cx, cy - r + 8, TFT_WHITE);
-    gfx->drawLine(cx, cy + r - 8, cx, cy + r, TFT_WHITE);
+    int16_t fill_end = start + (end - start) * value;
+    gfx->fillArc(cx, cy, r1, r1, start, fill_end, r1 - r2, fill_col);
   }
 };
