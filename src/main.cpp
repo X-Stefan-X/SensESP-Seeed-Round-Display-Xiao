@@ -22,10 +22,13 @@
 #include <lvgl.h>
 #include "displays/battery_ring_display.h"
 
+
 using namespace sensesp;
 
 float battery_soc = 0.0f;
 float system_voltage = 0.0f;
+BatteryRingDisplay* display = nullptr; 
+TFT_eSPI tft = TFT_eSPI();  
 
 // The setup function performs one-time application initialization.
 void setup() {
@@ -43,16 +46,26 @@ void setup() {
                     //->set_sk_server("192.168.10.3", 80)
                     ->get_app();
 
+tft.begin();
+// Nach TFT.begin() in setup():
+display = new BatteryRingDisplay(&tft);
 
+// === SIGNALK LISTENER (korrekte SensESP 3.2.2 Syntax) ===
+new LambdaConsumer<float>([&](float value) { 
+    battery_soc = value; 
+}, "electrical.batteries.1.capacity.stateOfCharge", "%");
 
-// SignalK Battery Consumer
-producers->new_sk_output<float>("electrical.batteries.1.capacity.stateOfCharge",
-                               &battery_soc, "%");
-producers->new_sk_output<float>("electrical.batteries.1.voltage",
-                               &system_voltage, "V");
+new LambdaConsumer<float>([&](float value) { 
+    system_voltage = value; 
+}, "electrical.batteries.1.voltage", "V");
 
-// Battery Ring Display
-ui->add_display(new BatteryRingDisplay(&battery_soc, &system_voltage));
+// === DISPLAY UPDATE TIMER ===
+reactesp::RepeatScheduler::schedule(500, []() {
+    if (display != nullptr) {
+        display->update_values(battery_soc, system_voltage);
+        display->draw();
+    }
+});
 
 
   // To avoid garbage collecting all shared pointers created in setup(),
