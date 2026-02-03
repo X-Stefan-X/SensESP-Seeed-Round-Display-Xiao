@@ -11,11 +11,13 @@ class BatteryRingDisplay {
   
   BatteryRingDisplay(TFT_eSPI* display) : tft(display) {}
   
-  void update_values(float soc, float volt) {
+  void update_soc(float soc) {
     battery_soc = soc;
+  }
+  void update_volt(float volt) {
     voltage = volt;
   }
-  
+
   void draw() {
     if (!tft) return;
     

@@ -17,6 +17,7 @@
 #include "sensesp/signalk/signalk_output.h"
 #include "sensesp/system/lambda_consumer.h"
 #include "sensesp_app_builder.h"
+#include "sensesp/signalk/signalk_value_listener.h"
 
 #include "I2C_BM8563.h"
 #include <lvgl.h>
@@ -25,8 +26,6 @@
 
 using namespace sensesp;
 
-float battery_soc = 0.0f;
-float system_voltage = 0.0f;
 BatteryRingDisplay* display = nullptr; 
 TFT_eSPI tft = TFT_eSPI();  
 
@@ -43,29 +42,31 @@ void setup() {
                     // settings. This is normally not needed.
                     //->set_wifi_client("My WiFi SSID", "my_wifi_password")
                     //->set_wifi_access_point("My AP SSID", "my_ap_password")
-                    //->set_sk_server("192.168.10.3", 80)
+                    ->set_sk_server("demo.signalk.org", 8)
                     ->get_app();
 
 tft.begin();
 // Nach TFT.begin() in setup():
 display = new BatteryRingDisplay(&tft);
 
-// === SIGNALK LISTENER (korrekte SensESP 3.2.2 Syntax) ===
-new LambdaConsumer<float>([&](float value) { 
-    battery_soc = value; 
-}, "electrical.batteries.1.capacity.stateOfCharge", "%");
+int listendelay = 1000;
 
-new LambdaConsumer<float>([&](float value) { 
-    system_voltage = value; 
-}, "electrical.batteries.1.voltage", "V");
+auto* soc_listener = new SKValueListener<float>("electrical.batteries.1.current", listendelay, "electrical/batteries/current");
+soc_listener->connect_to(new LambdaConsumer<float>([](float input){
+    display->update_soc(input);
+}));
 
-// === DISPLAY UPDATE TIMER ===
-reactesp::RepeatScheduler::schedule(500, []() {
+auto* bat_listener = new SKValueListener<float>("electrical.batteries.1.voltage", listendelay, "electrical/batteries/voltage");
+bat_listener->connect_to(new LambdaConsumer<float>([](float input){
+    display->update_volt(input);
+}));
+
+event_loop()->onRepeat(1000, [](){
     if (display != nullptr) {
-        display->update_values(battery_soc, system_voltage);
         display->draw();
     }
 });
+
 
 
   // To avoid garbage collecting all shared pointers created in setup(),
