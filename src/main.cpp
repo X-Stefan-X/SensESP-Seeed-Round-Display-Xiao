@@ -11,11 +11,12 @@
 
 #include "I2C_BM8563.h"
 #include <lvgl.h>
-
+#include <TFT_eSPI.h>
+#include "ui.h"
 
 using namespace sensesp;
 
-BatteryRingDisplay* display = nullptr; 
+//BatteryRingDisplay* display = nullptr; 
 TFT_eSPI tft = TFT_eSPI();  
 
 // The setup function performs one-time application initialization.
@@ -34,6 +35,8 @@ void setup() {
                     ->set_sk_server("demo.signalk.org", 8)
                     ->get_app();
 
+    setup_ui();  // UI-Setup
+/*
 tft.begin();
 // Nach TFT.begin() in setup():
 display = new BatteryRingDisplay(&tft);
@@ -56,7 +59,7 @@ event_loop()->onRepeat(1000, [](){
     }
 });
 
-
+*/
 
   // To avoid garbage collecting all shared pointers created in setup(),
   // loop from here.
