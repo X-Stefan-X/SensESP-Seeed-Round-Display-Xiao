@@ -1,7 +1,2 @@
-#ifndef UI_H
-#define UI_H
-
-#include "ui/ui.h" 
+#pragma once
 void setup_ui();
-
-#endif

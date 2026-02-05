@@ -17,7 +17,7 @@
 using namespace sensesp;
 
 //BatteryRingDisplay* display = nullptr; 
-TFT_eSPI tft = TFT_eSPI();  
+TFT_eSPI stats_display = TFT_eSPI();
 
 // The setup function performs one-time application initialization.
 void setup() {
