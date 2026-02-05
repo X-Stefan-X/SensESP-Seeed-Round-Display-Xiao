@@ -2,9 +2,14 @@
 #include <lvgl.h>
 #include <TFT_eSPI.h>
 
+// Include the SquareLine Studio generated UI
+extern "C" {
+    #include "../ui/ui.h"
+}
+
 extern TFT_eSPI stats_display;
 
-void my_disp_flush(lv_disp_t *disp, const lv_area_t *area, uint8_t *color_p) {
+void my_disp_flush(lv_display_t *disp, const lv_area_t *area, uint8_t *color_p) {
     uint32_t w = (area->x2 - area->x1 + 1);
     uint32_t h = (area->y2 - area->y1 + 1);
     
@@ -13,7 +18,7 @@ void my_disp_flush(lv_disp_t *disp, const lv_area_t *area, uint8_t *color_p) {
     stats_display.pushColors((uint16_t *)color_p, w * h, true);
     stats_display.endWrite();
     
-    lv_disp_flush_ready(disp);
+    lv_display_flush_ready(disp);
 }
 
 void setup_ui() {
@@ -26,12 +31,13 @@ void setup_ui() {
     // LVGL v9 Buffer
     static lv_color_t buf[240 * 10];
     static lv_draw_buf_t draw_buf;
-    lv_draw_buf_init(&draw_buf, 240, 10, LV_COLOR_FORMAT_RGB565, &buf);
+    // lv_draw_buf_init signature in v9: (draw_buf, width, height, cf, stride, data, data_size)
+    lv_draw_buf_init(&draw_buf, 240, 10, LV_COLOR_FORMAT_RGB565, LV_STRIDE_AUTO, buf, sizeof(buf));
     
-    // LVGL v9 Display (KORREKT)
-    lv_disp_t *disp = lv_disp_create(240, 240);
-    lv_disp_set_flush_cb(disp, my_disp_flush);
-    lv_disp_set_draw_buffers(disp, &draw_buf, NULL);
+    // LVGL v9 Display
+    lv_display_t *disp = lv_display_create(240, 240);
+    lv_display_set_flush_cb(disp, my_disp_flush);
+    lv_display_set_draw_buffers(disp, &draw_buf, NULL);
     
     ui_init();
     
