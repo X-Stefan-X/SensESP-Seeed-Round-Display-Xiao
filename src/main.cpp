@@ -14,6 +14,10 @@
 #include <TFT_eSPI.h>
 #include "ui.h"
 
+extern "C" {
+  #include "../ui/ui.h"
+}
+
 using namespace sensesp;
 
 //BatteryRingDisplay* display = nullptr; 
@@ -32,34 +36,54 @@ void setup() {
                     // settings. This is normally not needed.
                     //->set_wifi_client("My WiFi SSID", "my_wifi_password")
                     //->set_wifi_access_point("My AP SSID", "my_ap_password")
-                    ->set_sk_server("demo.signalk.org", 8)
+                    //->set_sk_server("demo.signalk.org", 8)
                     ->get_app();
 
     setup_ui();  // UI-Setup
-/*
-tft.begin();
-// Nach TFT.begin() in setup():
-display = new BatteryRingDisplay(&tft);
 
 int listendelay = 1000;
 
-auto* soc_listener = new SKValueListener<float>("electrical.batteries.1.current", listendelay, "electrical/batteries/current");
-soc_listener->connect_to(new LambdaConsumer<float>([](float input){
-    display->update_soc(input);
-}));
 
+//ARC unten Batterie 
 auto* bat_listener = new SKValueListener<float>("electrical.batteries.1.voltage", listendelay, "electrical/batteries/voltage");
 bat_listener->connect_to(new LambdaConsumer<float>([](float input){
-    display->update_volt(input);
+    int arc_value = (int)(input / 14.4*4095);
+    lv_arc_set_value(ui_ARCbatLevel, arc_value); 
+
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%.2f V", input);
+    lv_label_set_text(ui_LBLunten, buf);
 }));
 
-event_loop()->onRepeat(1000, [](){
-    if (display != nullptr) {
-        display->draw();
-    }
+
+//ARC oben Throttle
+auto* throttle_out = new SKOutput<float>("propulsion.port.throttle", "propulsion/port/throttle");
+
+// Event Callback registrieren: bei jeder Änderung am Arc
+lv_obj_add_event_cb(ui_ARCoben, [](lv_event_t* e) {
+    // Pointer auf SKOutput aus user_data holen
+    auto* output = (SKOutput<float>*)lv_event_get_user_data(e);
+    
+    int raw = lv_arc_get_value(ui_ARCoben);  // 0-4095
+    float value = (float)raw / 4095.0 * 100.0;  // z.B. auf 0-100% umrechnen
+    
+    // Label aktualisieren
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%.0f%%", value);
+    lv_label_set_text(ui_LBLoben, buf);
+    
+    // An SignalK senden
+    output->set(value);
+    
+}, LV_EVENT_VALUE_CHANGED, throttle_out);
+
+
+
+event_loop()->onRepeat(5, [](){
+    lv_timer_handler();
 });
 
-*/
+
 
   // To avoid garbage collecting all shared pointers created in setup(),
   // loop from here.

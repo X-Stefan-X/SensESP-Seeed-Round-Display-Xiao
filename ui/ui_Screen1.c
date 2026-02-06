@@ -7,6 +7,16 @@
 
 lv_obj_t *ui_Screen1 = NULL;lv_obj_t *ui_ARCbatLevel = NULL;lv_obj_t *ui_LBLunten = NULL;lv_obj_t *ui_ARCoben = NULL;lv_obj_t *ui_LBLoben = NULL;lv_obj_t *ui_SWon = NULL;lv_obj_t *ui_SWregen = NULL;
 // event funtions
+void ui_event_ARCoben( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_VALUE_CHANGED) {
+      _ui_label_set_property(ui_LBLoben, _UI_LABEL_PROPERTY_TEXT, "");
+}
+if ( event_code == LV_EVENT_VALUE_CHANGED) {
+      ArcObenValueChange( e );
+}
+}
 
 // build funtions
 
@@ -39,6 +49,7 @@ ui_ARCoben = lv_arc_create(ui_Screen1);
 lv_obj_set_width( ui_ARCoben, 235);
 lv_obj_set_height( ui_ARCoben, 235);
 lv_obj_set_align( ui_ARCoben, LV_ALIGN_CENTER );
+lv_obj_set_scrollbar_mode(ui_ARCoben, LV_SCROLLBAR_MODE_ON);
 lv_arc_set_range(ui_ARCoben, 0,4095);
 lv_arc_set_value(ui_ARCoben, 2047);
 lv_arc_set_bg_angles(ui_ARCoben,185,355);
@@ -76,6 +87,8 @@ lv_obj_set_style_bg_opa(ui_SWregen, 255, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 
 lv_obj_set_style_bg_color(ui_SWregen, lv_color_hex(0x2B00FF), LV_PART_KNOB | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_SWregen, 255, LV_PART_KNOB| LV_STATE_DEFAULT);
+
+lv_obj_add_event_cb(ui_ARCoben, ui_event_ARCoben, LV_EVENT_ALL, NULL);
 
 }
 

@@ -467,7 +467,6 @@
               },
               {
                 "nid": 90,
-                "flags": 1048576,
                 "strtype": "OBJECT/Flags",
                 "InheritedType": 1
               },
@@ -479,14 +478,13 @@
               },
               {
                 "nid": 225,
-                "flags": 1048576,
                 "strtype": "OBJECT/Scrolling",
                 "InheritedType": 1
               },
               {
                 "nid": 300,
                 "strtype": "OBJECT/Scrollbar_mode",
-                "strval": "AUTO",
+                "strval": "ON",
                 "InheritedType": 3
               },
               {
@@ -509,13 +507,11 @@
               },
               {
                 "nid": 320,
-                "flags": 1048576,
                 "strtype": "OBJECT/States",
                 "InheritedType": 1
               },
               {
                 "nid": 1010,
-                "flags": 1048576,
                 "strtype": "ARC/Arc",
                 "InheritedType": 1
               },
@@ -579,6 +575,142 @@
                 "strtype": "ARC/Style_knob",
                 "strval": "lv.PART.KNOB, Rectangle, Pad",
                 "InheritedType": 11
+              },
+              {
+                "disabled": false,
+                "nid": 1000441,
+                "strtype": "_event/EventHandler",
+                "strval": "VALUE_CHANGED",
+                "childs": [
+                  {
+                    "nid": 1000442,
+                    "strtype": "_event/name",
+                    "strval": "ArcObenValueChg",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000443,
+                    "strtype": "_event/condition_C",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000444,
+                    "strtype": "_event/condition_P",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000452,
+                    "strtype": "_event/action",
+                    "strval": "LABEL_PROPERTY",
+                    "childs": [
+                      {
+                        "nid": 1000453,
+                        "strtype": "LABEL_PROPERTY/Name",
+                        "strval": "LABEL_PROPERTY",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000454,
+                        "strtype": "LABEL_PROPERTY/Call",
+                        "strval": "SetLabelProperty(<{Target}>, '<{Property}>', '<{Value}>')",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000455,
+                        "strtype": "LABEL_PROPERTY/CallC",
+                        "strval": "_ui_label_set_property(<{Target}>, _UI_LABEL_PROPERTY_<{Property}>, \"<{Value}>\");",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000456,
+                        "strtype": "LABEL_PROPERTY/Target",
+                        "strval": "GUID33100006-433390S164536",
+                        "InheritedType": 9
+                      },
+                      {
+                        "nid": 1000457,
+                        "strtype": "LABEL_PROPERTY/Property",
+                        "strval": "Text",
+                        "InheritedType": 3
+                      },
+                      {
+                        "nid": 1000458,
+                        "strtype": "LABEL_PROPERTY/Value",
+                        "strval": "",
+                        "InheritedType": 10
+                      }
+                    ],
+                    "InheritedType": 10
+                  }
+                ],
+                "InheritedType": 4
+              },
+              {
+                "disabled": false,
+                "nid": 1000459,
+                "strtype": "_event/EventHandler",
+                "strval": "VALUE_CHANGED",
+                "childs": [
+                  {
+                    "nid": 1000460,
+                    "strtype": "_event/name",
+                    "strval": "Event1",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000461,
+                    "strtype": "_event/condition_C",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000462,
+                    "strtype": "_event/condition_P",
+                    "strval": "",
+                    "InheritedType": 10
+                  },
+                  {
+                    "nid": 1000463,
+                    "strtype": "_event/action",
+                    "strval": "CALL FUNCTION",
+                    "childs": [
+                      {
+                        "nid": 1000464,
+                        "strtype": "CALL FUNCTION/Name",
+                        "strval": "CALL FUNCTION",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000465,
+                        "strtype": "CALL FUNCTION/Call",
+                        "strval": "<{Function_name}>( event_struct )",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000466,
+                        "strtype": "CALL FUNCTION/CallC",
+                        "strval": "<{Function_name}>( e );",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000467,
+                        "strtype": "CALL FUNCTION/Function_name",
+                        "strval": "ArcObenValueChange",
+                        "InheritedType": 10
+                      },
+                      {
+                        "nid": 1000468,
+                        "strtype": "CALL FUNCTION/Dont_export_function",
+                        "strval": "False",
+                        "InheritedType": 2
+                      }
+                    ],
+                    "InheritedType": 10
+                  }
+                ],
+                "InheritedType": 4
               }
             ],
             "saved_objtypeKey": "ARC"
@@ -1228,7 +1360,7 @@
     "custom_variable_prefix": "uic",
     "separate_screen_save": false,
     "hierarchy_state_save": false,
-    "backup_cnt": 4,
+    "backup_cnt": 6,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "imagebytearrayprefix": "",
@@ -1239,7 +1371,7 @@
     "naming": "Name",
     "naming_force_lowercase": false,
     "naming_add_subcomponent": false,
-    "nidcnt": 1000441,
+    "nidcnt": 1000473,
     "BitDepth": 16,
     "Name": "SensESP Round Display"
   }

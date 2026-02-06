@@ -16,6 +16,7 @@ extern void ui_Screen1_screen_destroy(void);
 extern lv_obj_t *ui_Screen1;
 extern lv_obj_t *ui_ARCbatLevel;
 extern lv_obj_t *ui_LBLunten;
+extern void ui_event_ARCoben( lv_event_t * e);
 extern lv_obj_t *ui_ARCoben;
 extern lv_obj_t *ui_LBLoben;
 extern lv_obj_t *ui_SWon;
