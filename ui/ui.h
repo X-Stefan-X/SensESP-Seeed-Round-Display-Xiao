@@ -33,6 +33,9 @@ extern "C" {
 // EVENTS
 extern lv_obj_t *ui____initial_actions0;
 
+// IMAGES AND IMAGE SETS
+LV_IMG_DECLARE( ui_img_1183780206);   // assets/icons8-battery-level-96.png
+
 // UI INIT
 void ui_init(void);
 void ui_destroy(void);

@@ -15,12 +15,27 @@ extern void ui_Screen1_screen_init(void);
 extern void ui_Screen1_screen_destroy(void);
 extern lv_obj_t *ui_Screen1;
 extern lv_obj_t *ui_ARCbatLevel;
-extern lv_obj_t *ui_LBLunten;
 extern void ui_event_ARCoben( lv_event_t * e);
 extern lv_obj_t *ui_ARCoben;
+extern lv_obj_t *ui_PlState;
 extern lv_obj_t *ui_LBLoben;
+extern void ui_event_SWon( lv_event_t * e);
 extern lv_obj_t *ui_SWon;
 extern lv_obj_t *ui_SWregen;
+extern lv_obj_t *ui_Label1;
+extern lv_obj_t *ui_Image1;
+extern lv_obj_t *ui_LBLunten;
+extern lv_obj_t *ui_blbGen;
+extern lv_obj_t *ui_lblRPM;
+extern lv_obj_t *ui_lblRPMtxt;
+extern lv_obj_t *ui_BarTempMotor;
+extern lv_obj_t *ui_lblTempMotor;
+extern lv_obj_t *ui_BarTempCoolant;
+extern lv_obj_t *ui_lblTempCoolant;
+extern lv_obj_t *ui_lblECO;
+extern lv_obj_t *ui_BtMP;
+extern lv_obj_t *ui_lblPOS;
+extern lv_obj_t *ui_lblMitte;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -9,3 +9,13 @@ void ArcObenValueChange(lv_event_t * e)
 {
 	// Your code here
 }
+
+void SWonChecked(lv_event_t * e)
+{
+	// Your code here
+}
+
+void SWOnUnchecked(lv_event_t * e)
+{
+	// Your code here
+}

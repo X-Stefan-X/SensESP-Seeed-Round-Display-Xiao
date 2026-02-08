@@ -11,6 +11,8 @@ extern "C" {
 #endif
 
 void ArcObenValueChange(lv_event_t * e);
+void SWonChecked(lv_event_t * e);
+void SWOnUnchecked(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/
