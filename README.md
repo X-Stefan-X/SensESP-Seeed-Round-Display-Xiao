@@ -6,7 +6,7 @@
 
 ## Überblick
 
-Dieses Projekt implementiert eine vollständige Schiffsanzeige für Elektro- oder Hybridantriebe. Das runde LVGL-Display zeigt Drosselstellung, Drehzahl, Temperaturen und Batteriestatus an und erlaubt gleichzeitig die bidirektionale Steuerung über einen Signal K Server.
+Dieses Projekt implementiert eine vollständige Schiffsanzeige für Elektroantriebe. Das runde LVGL-Display zeigt Gas, Drehzahl, Temperaturen und Batteriestatus an und erlaubt gleichzeitig die bidirektionale Steuerung über einen Signal K Server.
 
 Das UI wurde mit **SquareLine Studio 1.6.0** entworfen und als LVGL 9-Code generiert. Die Kommunikation mit dem Signal K Server erfolgt über die **SensESP**-Bibliothek.
 
@@ -56,7 +56,7 @@ SPI-Taktfrequenz: 40 MHz (Schreiben), 20 MHz (Lesen)
 | Anzeige | Beschreibung |
 |---|---|
 | **Batteriebogen (unten)** | Batteriespannung in Prozent (9 V = 0 %, 14,7 V = 100 %) mit Farbkodierung |
-| **Drosselbogen (oben)** | Drosselstellung 0–100 %, bidirektional steuerbar |
+| **Gasbogen (oben)** | Drosselstellung 0–100 %, bidirektional steuerbar |
 | **RPM-Label** | Motordrehzahl in U/min (Hz → RPM) |
 | **Motortemperatur-Balken** | Temperatur 0–125 °C, Farbverlauf Grün → Orange → Rot |
 | **Kühlmitteltemperatur-Balken** | Temperatur 0–125 °C, Farbverlauf Grün → Orange → Rot |
